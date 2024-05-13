@@ -1,57 +1,50 @@
 import vlc
 import tkinter as tk
 from tkinter import ttk
-
-'''
-Este código mostra como reproduzir um arquivo de vídeo MP4 (video e audio) usando o VLC Media Player,
-embutido em um frame tkinter. Antes da execução, é definido o tamanho e posição da janela de exibição.'''
+import sys
 
 def play_video_vlc(file_path):
-    # Cria uma instância do frame tkinter
     root = tk.Tk()
     window_width = 400
     window_height = 225
-    screen_width = root.winfo_screenwidth()  # Obtém a largura da tela
-    screen_height = root.winfo_screenheight()  # Obtém a altura da tela
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
 
-    # Calcula as coordenadas x e y para a janela Tk root
-    x = (screen_width/2) - (window_width/2)
-    
-    # Posiciona y um pouco abaixo do centro, vamos dizer 20% abaixo
-    vertical_offset = screen_height * 0.20  # 20% da altura da tela
+    x = (screen_width / 2) - (window_width / 2)
+    vertical_offset = screen_height * 0.20
     y = (screen_height / 2 - window_height / 2) + vertical_offset
-    
-    # Define a geometria da janela tkinter e posiciona no centro
+
     root.geometry('%dx%d+%d+%d' % (window_width, window_height, x, y))
 
-    # Cria o player VLC
-    player = vlc.MediaPlayer(file_path)
+    # Configura as opções do VLC para suprimir logs, defina 'verbose' para 0.
+    vlc_instance = vlc.Instance('--quiet', '--verbose=0')
 
-    # Incorpora o player VLC em um frame na janela tkinter
+    player = vlc_instance.media_player_new()
+    media = vlc_instance.media_new(file_path)
+    media.add_option('input-repeat=-1')  # Opção para repetir vídeo se necessário.
+    player.set_media(media)
+
     frame = ttk.Frame(root)
     frame.pack(fill=tk.BOTH, expand=True)
     video_panel = ttk.Frame(frame)
     video_panel.pack(fill=tk.BOTH, expand=True)
 
-    # Obtém o identificador para o frame de vídeo e passa para o VLC
-    video_handle = video_panel.winfo_id()  # Obtém o ID da janela do frame
-    player.set_hwnd(video_handle)  # Passa para o VLC renderizar o vídeo neste frame
-
-    # Começa a reproduzir o vídeo
+    video_handle = video_panel.winfo_id()
+    player.set_hwnd(video_handle)
     player.play()
 
-    # Monitora a reprodução e fecha quando terminar
     def check_end():
         if player.get_state() == vlc.State.Ended:
             player.stop()
             root.destroy()
         else:
-            root.after(1000, check_end)  # Verifica a cada 1000ms
+            root.after(1000, check_end)
 
     check_end()
-
-    # Inicia o loop de eventos do tkinter
     root.mainloop()
 
-# Finalmente executa o vídeo
-play_video_vlc(r"C:\Cesar_School\PROJETO\Codigo_Python\Strogonoff.mp4")
+if len(sys.argv) > 1:
+    video_path = sys.argv[1]
+    play_video_vlc(video_path)
+else:
+    print("Nenhum arquivo de vídeo foi especificado.")
