@@ -1,9 +1,9 @@
 # Mensagens em português e inglês
 cardapio = {
-    '001': {
+    '007': {
         'pt': {
             'prato': "\nSTROGONOFF VEGETARIANO",
-            'descrição': "Pedaços suculentos de cogumelos frescos e proteína de soja texturizada, delicadamente cozidos em um molho cremoso e rico, repleto de temperos aromáticos. Servido com arroz soltinho e batatas douradas, este prato é uma celebração da culinária vegetariana, perfeito para saciar seus desejos sem abrir mão do sabor e da tradição.",
+            'descricao': "Pedaços suculentos de cogumelos frescos e proteína de soja texturizada, delicadamente cozidos em um molho cremoso e rico, repleto de temperos aromáticos. Servido com arroz soltinho e batatas douradas, este prato é uma celebração da culinária vegetariana, perfeito para saciar seus desejos sem abrir mão do sabor e da tradição.",
             'lista_ingredientes': "\nIngredientes: Frango, sal, pimenta, azeite, cebola, beringela, tomate, salsa, creme de leite, ketchup, mostarda",
             'preco_tempo': "\nPreço: R$ 45,00 - Tempo estimado de preparo: 20 minutos",
             'info_nutricional': "\nInformação Nutricional (Porção de 60g):",
@@ -36,10 +36,10 @@ cardapio = {
             'atencao_lactose': "Attention: This food CONTAINS LACTOSE",
         }
     },
-    '002': {
+    '008': {
         'pt': {
             'prato': "\nLASANHA VEGETARIANA",
-            'descrição': "Camadas de massa fina intercaladas com molho de tomate caseiro, abobrinha, berinjela e ricota, cobertas com queijo mozzarella derretido. Um prato reconfortante e cheio de sabor, ideal para quem aprecia uma refeição substanciosa e saudável.",
+            'descricao': "Camadas de massa fina intercaladas com molho de tomate caseiro, abobrinha, berinjela e ricota, cobertas com queijo mozzarella derretido. Um prato reconfortante e cheio de sabor, ideal para quem aprecia uma refeição substanciosa e saudável.",
             'lista_ingredientes': "\nIngredientes: Massa de lasanha, tomate, abobrinha, berinjela, ricota, mozzarella, alho, azeite, sal, pimenta e manjericão.",
             'preco_tempo': "\nPreço: R$ 50,00 - Tempo estimado de preparo: 40 minutos",
             'info_nutricional': "\nInformação Nutricional (Porção de 100g):",
@@ -71,9 +71,44 @@ cardapio = {
             'base_dieta': "*Daily values based on a 2,000 calorie diet.",
             'atencao_lactose': "Attention: This food CONTAINS LACTOSE"
         }
+    },
+    '009': {
+        'pt': {
+            'prato': "\nRISOTO DE COGUMELOS",
+            'descricao': "Um cremoso risoto preparado com uma seleção de cogumelos frescos, arroz arbório, cebola, alho e finalizado com queijo parmesão ralado na hora. Perfeito para uma refeição gourmet vegetariana.",
+            'lista_ingredientes': "\nIngredientes: Arroz arbório, cogumelos variados (shiitake, champignon, porcini), caldo de legumes, cebola, alho, parmesão, manteiga, azeite, sal, pimenta e salsinha.",
+            'preco_tempo': "\nPreço: R$ 45,00 - Tempo estimado de preparo: 30 minutos",
+            'info_nutricional': "\nInformação Nutricional (Porção de 100g):",
+            'calorias': "\nValor Calórico: 150kcal (7.5% VD)",
+            'carboidratos': "Carboidratos: 25g (8% VD)",
+            'proteinas': "Proteínas: 5g (7% VD)",
+            'gorduras': "Gorduras totais: 5g (8% VD)",
+            'saturadas': "Gorduras saturadas: 3g",
+            'trans': "Gorduras trans: 0g",
+            'fibra': "Fibra alimentar: 2g (8% VD)",
+            'sodio': "Sódio: 200mg (8% VD)",
+            'base_dieta': "*Valores diários com base em dieta de 2.000kcal ou 8.400kj.",
+            'atencao_lactose': "Atenção: Este alimento CONTÉM LACTOSE"
+        },
+        'en': {
+            'prato': "\nMUSHROOM RISOTTO",
+            'descricao': "A creamy risotto made with a selection of fresh mushrooms, Arborio rice, onions, garlic, and finished with freshly grated Parmesan cheese. Perfect for a gourmet vegetarian meal.",
+            'lista_ingredientes': "\nIngredients: Arborio rice, mixed mushrooms (shiitake, champignon, porcini), vegetable broth, onion, garlic, Parmesan cheese, butter, olive oil, salt, pepper, and parsley.",
+            'preco_tempo': "\nPrice: $45.00 - Estimated preparation time: 30 minutes",
+            'info_nutricional': "\nNutritional Information (Per 100g serving):",
+            'calorias': "\nCaloric Value: 150kcal (7.5% DV)",
+            'carboidratos': "Carbohydrates: 25g (8% DV)",
+            'proteinas': "Proteins: 5g (7% DV)",
+            'gorduras': "Total Fats: 5g (8% DV)",
+            'saturadas': "Saturated Fats: 3g",
+            'trans': "Trans Fats: 0g",
+            'fibra': "Dietary Fiber: 2g (8% DV)",
+            'sodio': "Sodium: 200mg (8% DV)",
+            'base_dieta': "*Daily values based on a 2,000 kcal or 8,400 kj diet.",
+            'atencao_lactose': "Attention: This food CONTAINS LACTOSE"
+        }
     }
 }
-
 def get_informacoes_prato(codigo_prato, idioma, chave):
     """Retorna as informações do prato com base no código, idioma e chave especificados."""
     prato = cardapio.get(codigo_prato, {})
