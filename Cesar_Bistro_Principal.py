@@ -45,18 +45,20 @@ def escolher_idioma():
 
 # 2ª Tela - Função de boas vindas e Login
 def bemvindo():
+    global logado
     mostra_tela_titulo()
     print(get_mensagem_navegacao(idioma_atual, 'bemvindo'))
     print(get_mensagem_navegacao(idioma_atual, 'mensagem_boas_vindas'))
     print(get_mensagem_navegacao(idioma_atual, "pergunta_fazer_login"))
     print(get_mensagem_navegacao(idioma_atual, "login"))
-    print(get_mensagem_navegacao(idioma_atual, "va_cardapio"))
+    print(get_mensagem_navegacao(idioma_atual, "ir_cardapio"))
     print(get_mensagem_navegacao(idioma_atual, "3 - voltar"))
 
     choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
     if choice == '1':
         efetua_login()
     elif choice == '2':
+        logado = False
         escolhe_cardapio()
     elif choice == '3':
         mostra_tela_titulo()
@@ -94,7 +96,7 @@ def escolhe_cardapio():
     print(get_mensagem_navegacao(idioma_atual, "5 - Sem Gluten"))
     print(get_mensagem_navegacao(idioma_atual, "6 - Sazonal"))
     if logado:
-        print(get_mensagem_navegacao(idioma_atual, "7 - Personalizado"))
+        print(get_mensagem_navegacao(idioma_atual, "7 - Favoritos"))
         print(get_mensagem_navegacao(idioma_atual, "8 - voltar"))
     else:
         print(get_mensagem_navegacao(idioma_atual, "7 - voltar"))
@@ -110,8 +112,7 @@ def escolhe_cardapio():
     except ValueError:
         print('Por favor, digite um número válido.')
         time.sleep(2)
-        mostra_tela_titulo()
-        acessar_menu
+        escolhe_cardapio()
 
 # 5ª Tela - Função para escolher o cardápio
 def lista_pratos_cardapio_escolhido(cardapio):
@@ -125,15 +126,15 @@ def lista_pratos_cardapio_escolhido(cardapio):
         choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
         if choice == '1':
             codigo_prato = '001'
+            apresenta_prato_escolhido(codigo_prato)        
         elif choice == '2':
             codigo_prato = '002'
+            apresenta_prato_escolhido(codigo_prato)
         elif choice == '3':
             codigo_prato = '003'
+            apresenta_prato_escolhido(codigo_prato)
         elif choice == '4':
             escolhe_cardapio()
-        apresenta_prato_escolhido(codigo_prato)        
-        time.sleep(2)
-        escolhe_cardapio()
 
     elif cardapio == 2:
         print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_DIABETICO"))
@@ -142,15 +143,15 @@ def lista_pratos_cardapio_escolhido(cardapio):
         choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
         if choice == '1':
             codigo_prato = '004'
+            apresenta_prato_escolhido(codigo_prato)        
         elif choice == '2':
             codigo_prato = '005'
+            apresenta_prato_escolhido(codigo_prato)        
         elif choice == '3':
             codigo_prato = '006'
+            apresenta_prato_escolhido(codigo_prato)
         elif choice == '4':
-            escolhe_cardapio()
-        apresenta_prato_escolhido(codigo_prato)        
-        time.sleep(2)
-        escolhe_cardapio()
+            escolhe_cardapio()          
      
     elif cardapio == 3:
         print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_VEGETARIANO"))
@@ -167,8 +168,8 @@ def lista_pratos_cardapio_escolhido(cardapio):
             codigo_prato = '009'
             apresenta_prato_escolhido(codigo_prato)        
         elif choice == '4':
-            mostra_tela_titulo()
-            escolhe_cardapio()          
+            escolhe_cardapio()
+
     elif cardapio == 4:
         print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_LACTOSE"))
         ler_arquivo_pratos('./Cardapios/sem_lactose.txt')
@@ -184,10 +185,7 @@ def lista_pratos_cardapio_escolhido(cardapio):
             codigo_prato = '009'
             apresenta_prato_escolhido(codigo_prato)        
         elif choice == '4':
-            mostra_tela_titulo()
             escolhe_cardapio() 
-        time.sleep(2)
-        escolhe_cardapio()
 
     elif cardapio == 5:
         print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_GLUTEN"))
@@ -204,8 +202,8 @@ def lista_pratos_cardapio_escolhido(cardapio):
             codigo_prato = '012'
             apresenta_prato_escolhido(codigo_prato)        
         elif choice == '4':
-            mostra_tela_titulo()
             escolhe_cardapio() 
+
     elif cardapio == 6:
         print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SAZONAL"))
         ler_arquivo_pratos('./Cardapios/sazonal.txt')
@@ -221,21 +219,19 @@ def lista_pratos_cardapio_escolhido(cardapio):
             codigo_prato = '015'
             apresenta_prato_escolhido(codigo_prato)        
         elif choice == '4':
-            mostra_tela_titulo()
             escolhe_cardapio()
 
-    elif cardapio == 7:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_PERSONALIZADO"))
+    elif (logado == True and cardapio == 7):
+        # print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_FAVORITO"))
+        rotina_em_desenvolvimento()
         time.sleep(2)
         escolhe_cardapio()
 
-    elif cardapio == 8:
-        mostra_tela_titulo()
+    elif (logado == False and cardapio == 8):
         escolhe_cardapio()
     else:
         print('\nDigite um Numero Válido')
         time.sleep(2)
-        mostra_tela_titulo()
         escolhe_cardapio()
 
 def ler_arquivo_pratos(menu_escolhido):
@@ -275,7 +271,7 @@ def apresenta_prato_escolhido(codigo_prato):
             apresenta_prato_escolhido(codigo_prato)
         # Escolheu opção 3 (Personalize seu prato)
         elif choice == '3':
-            mostra_tela_titulo()
+            # mostra_tela_titulo()
             personalizar_prato()
                 
         # Escolheu opção 4 (Vídeo de apresentação do prato)
@@ -283,7 +279,7 @@ def apresenta_prato_escolhido(codigo_prato):
             print(get_mensagem_navegacao(idioma_atual, 'aguarde'))
             reproduz_video_prato()
             mostra_tela_titulo()
-            lista_pedido_prato(codigo_prato)
+            apresenta_prato_escolhido(codigo_prato)
         # Escolheu opção 5 (voltar)
         elif choice == '5':
             mostra_tela_titulo()
@@ -310,6 +306,7 @@ def lista_informaçoes_nutricionais():
     input(get_mensagem_navegacao(idioma_atual, 'aperte_enter'))
 
 def tela_personalizar_prato():
+    mostra_tela_titulo()
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'prato'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'lista_ingredientes'))
     print(get_mensagem_navegacao(idioma_atual, 'retirar_ingrediente'))
@@ -350,9 +347,8 @@ def personalizar_prato():
                 print(get_mensagem_navegacao(idioma_atual, 'sem_ingredientes_adicionados'))
 
         elif choice == '3':
-            mostra_tela_titulo()
-            lista_pedido_prato(codigo_prato)
-            break
+            apresenta_prato_escolhido(codigo_prato)
+            pass
         else:
             print(get_mensagem_navegacao(idioma_atual, 'invalido'))
 
@@ -384,8 +380,6 @@ def rotina_em_desenvolvimento():
         os.system("cls" if os.name == 'nt' else "clear")  # Limpa a tela
         time.sleep(0.5)  # Tempo com a tela limpa
 
-    mostra_tela_titulo()
-    apresenta_prato_escolhido(codigo_prato)
 
 
 
