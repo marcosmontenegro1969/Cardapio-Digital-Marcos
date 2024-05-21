@@ -52,7 +52,8 @@ def bemvindo():
     print(get_mensagem_navegacao(idioma_atual, "pergunta_fazer_login"))
     print(get_mensagem_navegacao(idioma_atual, "login"))
     print(get_mensagem_navegacao(idioma_atual, "ir_cardapio"))
-    print(get_mensagem_navegacao(idioma_atual, "3 - voltar"))
+    print(get_mensagem_navegacao(idioma_atual, "cadastrar"))
+    print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
 
     choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
     if choice == '1':
@@ -61,6 +62,9 @@ def bemvindo():
         logado = False
         escolhe_cardapio()
     elif choice == '3':
+        cadastrar_cliente()
+        bemvindo()
+    elif choice == '4':
         mostra_tela_titulo()
         escolher_idioma()
     else:
@@ -69,20 +73,50 @@ def bemvindo():
 # 3ª Tela - Função opcional de efetuar login
 def efetua_login():
     mostra_tela_titulo()
-    email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+    
+    while True:
+        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        # Exemplo de uso:
+        if valida_email(email):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+
     if email:
         senha = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
         if senha:
-            if email == 'admin' and senha == 'admin':
+            if senha == 'admin':
                 print(get_mensagem_navegacao(idioma_atual, 'login_sucesso'))
                 global logado
                 logado = True
                 time.sleep(2)
                 escolhe_cardapio()
             else:
-                print("\nUsuário ou senha inválidos. Tente novamente.")
+                print(get_mensagem_navegacao(idioma_atual, 'login_falhou'))
                 time.sleep(2)
                 efetua_login()
+
+def valida_email(email):
+    # Verifica se há um "@" no email
+    if "@" not in email:
+        return False
+    
+    # Divide o email em duas partes: antes e depois do "@"
+    partes = email.split("@")
+    
+    # Verifica se restou 2 partes apenas
+    if len(partes) != 2:
+        return False
+    
+    # Verifica se há um "." na parte depois do "@"
+    if "." not in partes[1]:
+        return False
+    
+    # Verifica se há algo antes do "@" e algo entre o "@" e o "."
+    if not partes[0] or not partes[1].split(".")[0]:
+        return False
+    
+    return True
 
 # 4ª Tela - Função para acessar o menu principal
 def escolhe_cardapio():
@@ -110,9 +144,81 @@ def escolhe_cardapio():
             lista_pratos_cardapio_escolhido(cardapio)
 
     except ValueError:
-        print('Por favor, digite um número válido.')
+        print(get_mensagem_navegacao(idioma_atual, 'DIGITE_NUMERO_VALIDO'))
         time.sleep(2)
         escolhe_cardapio()
+
+def cadastrar_cliente():
+    mostra_tela_titulo()
+    nome = input(get_mensagem_navegacao(idioma_atual, 'Digite_seu_nome'))
+    while True:
+        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        if valida_email(email):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+    while True:
+        senha = input(idioma_atual, 'informe_senha')
+        confirma_senha = input(idioma_atual, 'informe_senha_novamente')
+        if senha != confirma_senha:
+            print(idioma_atual, 'senhas_nao_conferem')
+            time.sleep(2)
+            mostra_tela_titulo()
+            print("\nCadastro de Cliente")
+            print("\nSeu nome : ", nome)
+            print("Seu email : ", email)
+        elif not valida_senha(senha):
+            print("\nSenha inválida. A senha deve ter pelo menos 4 caracteres, incluindo pelo menos 1 número e 1 letra.")
+            time.sleep(2)
+            mostra_tela_titulo()
+            print("\nCadastro de Cliente")
+            print("\nSeu nome : ", nome)
+            print("Seu email : ", email)
+        else:
+            break
+    telefone = input("Digite seu telefone: ")
+    restricao_alimentar = input("""Se possuir alguma restrição alimentar informe: 
+  1 - Diabetico.
+  2 - Vegetariano.
+  3 - Intolerante a Lactose.
+  4 - Intolerante a Glúten
+  """)
+    alergia = input("Possui alguma alergia? Se sim, informe: ")
+
+    # Gerar um ID único para o cliente, baseado no numero da linha
+    try:
+        with open("clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            id_cliente = len(linhas) + 1
+    except FileNotFoundError:
+        id_cliente = 1
+
+    cliente = {
+        "id": id_cliente,
+        "email": email,
+        "senha": senha,
+        "nome": nome,
+        "telefone": telefone,
+        "restricao_alimentar": restricao_alimentar,
+        "alergia": alergia
+    }
+
+    grava_cadastro_cliente(cliente)
+    print("\nCadastro efetuado com sucesso!")
+    time.sleep(3)
+
+def valida_senha(senha):
+    if len(senha) < 4:
+        return False
+    if not any(char.isalpha() for char in senha):
+        return False
+    if not any(char.isdigit() for char in senha):
+        return False
+    return True
+
+def grava_cadastro_cliente(cliente):
+    with open("clientes.txt", "a") as arquivo:
+        arquivo.write(f"{cliente['id']},{cliente['email']},{cliente['senha']},{cliente['nome']},{cliente['telefone']},{cliente['restricao_alimentar']},{cliente['alergia']}\n")
 
 # 5ª Tela - Função para escolher o cardápio
 def lista_pratos_cardapio_escolhido(cardapio):
@@ -391,7 +497,6 @@ def main():
     mostra_tela_titulo()
     escolher_idioma()
     bemvindo()
-    efetua_login()
 
 # Executa o programa
 if __name__ == "__main__":

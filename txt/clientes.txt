@@ -1,0 +1,5 @@
+1,maml@cesar.school     ,111    ,João Silva     ,99991-1234 ,Diabético      ,Nenhuma
+2,cliente2@cesar.school ,222    ,Maria Souza    ,99992-1234 ,Vegetariana    ,Amendoim
+3,cliente3@cesar.school ,333    ,Carlos Pereira ,99993-1234 'Zero-Lactose   ,Leite
+4,cliente4@cesar.school ,444    ,Ana Costa      ,99994-1234 ,Celíaca        ,Glúten
+5,cliente5@cesar.school ,555    ,Bruno Lima     ,99995-1234 ,Nenhuma        ,Nenhuma
