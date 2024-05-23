@@ -52,7 +52,7 @@ def bemvindo():
     print(get_mensagem_navegacao(idioma_atual, "pergunta_fazer_login"))
     print(get_mensagem_navegacao(idioma_atual, "login"))
     print(get_mensagem_navegacao(idioma_atual, "ir_cardapio"))
-    print(get_mensagem_navegacao(idioma_atual, "cadastrar"))
+    print(get_mensagem_navegacao(idioma_atual, "cadastro_de_cliente"))
     print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
 
     choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
@@ -62,7 +62,7 @@ def bemvindo():
         logado = False
         escolhe_cardapio()
     elif choice == '3':
-        cadastrar_cliente()
+        cadastro_cliente()
         bemvindo()
     elif choice == '4':
         mostra_tela_titulo()
@@ -73,7 +73,7 @@ def bemvindo():
 # 3ª Tela - Função opcional de efetuar login
 def efetua_login():
     mostra_tela_titulo()
-    
+    print()
     while True:
         email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
         # Exemplo de uso:
@@ -118,6 +118,250 @@ def valida_email(email):
     
     return True
 
+def cadastro_cliente():
+    mostra_tela_titulo()
+    print(get_mensagem_navegacao(idioma_atual, 'manutencao_cadastro_cliente'))
+    print(get_mensagem_navegacao(idioma_atual, 'fazer_cadastro_cliente'))
+    print(get_mensagem_navegacao(idioma_atual, 'consultar_cadastro_cliente'))
+    print(get_mensagem_navegacao(idioma_atual, 'alterar_cadastro_cliente'))
+    print(get_mensagem_navegacao(idioma_atual, 'excluir_cadastro_cliente'))
+    print(get_mensagem_navegacao(idioma_atual, '5 - voltar'))
+
+    escolha = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+    if escolha == '1':
+        fazer_cadastro_cliente()
+    elif escolha == '2':
+        consultar_cadastro_cliente()
+        cadastro_cliente()
+    elif escolha == '3':
+        alterar_cadastro_cliente()
+        bemvindo()
+    elif escolha == '4':
+        excluir_cadastro()
+    elif escolha == '5':
+        bemvindo()
+    else:
+        print(get_mensagem_navegacao(idioma_atual, 'invalido'))
+        time.sleep(2)
+        cadastro_cliente()
+
+def fazer_cadastro_cliente():
+    mostra_tela_titulo()
+    print(get_mensagem_navegacao(idioma_atual, 'inclusão_cadastro_cliente'))
+
+    nome = input(get_mensagem_navegacao(idioma_atual, 'Digite_seu_nome'))
+    while True:
+        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        if valida_email(email):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+    while True:
+        senha = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
+        confirma_senha = input(get_mensagem_navegacao(idioma_atual, 'informe_senha_novamente'))
+        if senha != confirma_senha:
+            print(get_mensagem_navegacao(idioma_atual, 'senhas_nao_conferem'))
+            time.sleep(2)
+            mostra_tela_titulo()
+            print(get_mensagem_navegacao(idioma_atual, 'inclusão_cadastro_cliente'))
+            print("\nSeu nome: ", nome)
+            print("Seu email: ", email)
+        elif not valida_senha(senha):
+            print(get_mensagem_navegacao(idioma_atual, 'senha_invalida'))
+            time.sleep(2)
+            mostra_tela_titulo()
+            print(get_mensagem_navegacao(idioma_atual, 'inclusão_cadastro_cliente'))
+            print("\nSeu nome: ", nome)
+            print("Seu email: ", email)
+        else:
+            break
+    telefone = input(get_mensagem_navegacao(idioma_atual, 'digite_seu_telefone'))
+    while True:
+        restricao_alimentar = input("""Se possuir alguma restrição alimentar, informe: 
+  1 - Diabético
+  2 - Vegetariano
+  3 - Intolerante a Lactose
+  4 - Intolerante a Glúten
+  5 - Nenhuma
+  """)
+        if restricao_alimentar in ["1", "2", "3", "4", "5"]:
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'opcao_invalida'))
+    alergia = input("Informe se possui alguma alergia ('Enter' para nenhuma): ")
+
+    # Gerar um ID único para o cliente, baseado no número da linha
+    try:
+        with open("./txt/clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            if linhas:
+                ultimo_id = int(linhas[-1].split(",")[0])
+                id_cliente = ultimo_id + 1
+            else:
+                id_cliente = 1
+    except FileNotFoundError:
+        id_cliente = 1
+
+    cliente = {
+        "id": id_cliente,
+        "email": email,
+        "senha": senha,
+        "nome": nome,
+        "telefone": telefone,
+        "restricao_alimentar": restricao_alimentar,
+        "alergia": alergia
+    }
+
+    grava_cadastro_cliente(cliente)
+    print("\nCadastro efetuado com sucesso!")
+    time.sleep(3)
+
+def consultar_cadastro_cliente():
+    mostra_tela_titulo()
+    print(get_mensagem_navegacao(idioma_atual, 'consulta_cadastro_cliente'))
+
+    while True:
+        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        if valida_email(email_procurado):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+
+    restricoes_alimentares = {
+        "1": "Diabético",
+        "2": "Vegetariano",
+        "3": "Intolerante a Lactose",
+        "4": "Intolerante a Glúten",
+        "5": "Nenhuma"
+    }
+    
+    try:
+        with open("./txt/clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+            cliente_encontrado = False
+            for linha in linhas:
+                id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
+                if email.lower() == email_procurado.lower():
+                    restricao_alimentar_desc = restricoes_alimentares.get(restricao_alimentar, "Nenhuma")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'id_cliente')}{id_cliente}")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'email_cliente')}{email}")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'telefone_cliente')}{telefone}")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'restricao_alimentar_cliente')}{restricao_alimentar_desc}")
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'alergia_cliente')}{alergia}")
+                    cliente_encontrado = True
+                    break
+            
+            if not cliente_encontrado:
+                print(get_mensagem_navegacao(idioma_atual, 'cliente_nao_encontrado'))
+                
+    except FileNotFoundError:
+        print(get_mensagem_navegacao(idioma_atual, 'arquivo_nao_encontrado'))
+
+    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
+
+import time
+
+def alterar_cadastro_cliente():
+    mostra_tela_titulo()
+    print()
+    print(get_mensagem_navegacao(idioma_atual, 'alteracao_cadastro_cliente'))
+    print()
+    while True:
+        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        if valida_email(email_procurado):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+
+    restricoes_alimentares = {
+        "1": get_mensagem_navegacao(idioma_atual, 'diabetico'),
+        "2": get_mensagem_navegacao(idioma_atual, 'vegetariano'),
+        "3": get_mensagem_navegacao(idioma_atual, 'intolerante_lactose'),
+        "4": get_mensagem_navegacao(idioma_atual, 'intolerante_gluten'),
+        "5": get_mensagem_navegacao(idioma_atual, 'nenhuma')
+    }
+
+    try:
+        with open("./txt/clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+
+        cliente_encontrado = False
+        for i, linha in enumerate(linhas):
+            id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
+            if email.lower() == email_procurado.lower():
+                cliente_encontrado = True
+                while True:
+                    mostra_tela_titulo()
+                    print(f"{get_mensagem_navegacao(idioma_atual, 'id_cliente')}{id_cliente}")
+                    print(f"1. {get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
+                    print(f"2. {get_mensagem_navegacao(idioma_atual, 'email_cliente')}{email}")
+                    print(f"3. {get_mensagem_navegacao(idioma_atual, 'telefone_cliente')}{telefone}")
+                    print(f"4. {get_mensagem_navegacao(idioma_atual, 'restricao_alimentar_cliente')}{restricoes_alimentares.get(restricao_alimentar, get_mensagem_navegacao(idioma_atual, 'nenhuma'))}")
+                    print(f"5. {get_mensagem_navegacao(idioma_atual, 'alergia_cliente')}{alergia}")
+                    print()
+                    escolha = input(get_mensagem_navegacao(idioma_atual, 'escolha_alteracao'))
+
+                    if escolha == '':
+                        return
+
+                    if escolha == '1':
+                        novo_nome = input(get_mensagem_navegacao(idioma_atual, 'novo_nome'))
+                        if novo_nome:
+                            nome = novo_nome
+                    elif escolha == '3':
+                        novo_telefone = input(get_mensagem_navegacao(idioma_atual, 'novo_telefone'))
+                        if novo_telefone:
+                            telefone = novo_telefone
+                    elif escolha == '4':
+                        nova_restricao_alimentar = input(get_mensagem_navegacao(idioma_atual, 'nova_restricao_alimentar'))
+                        if nova_restricao_alimentar in ["1", "2", "3", "4", "5"]:
+                            restricao_alimentar = nova_restricao_alimentar
+                        else:
+                            print(get_mensagem_navegacao(idioma_atual, 'opcao_invalida'))
+                            time.sleep(2)
+                            continue
+                    elif escolha == '5':
+                        nova_alergia = input(get_mensagem_navegacao(idioma_atual, 'nova_alergia'))
+                        if nova_alergia:
+                            alergia = nova_alergia
+                    else:
+                        print(get_mensagem_navegacao(idioma_atual, 'opcao_invalida'))
+                        time.sleep(2)
+                        continue
+
+                    linhas[i] = f"{id_cliente},{email},{senha},{nome},{telefone},{restricao_alimentar},{alergia}\n"
+                    with open("./txt/clientes.txt", "w") as arquivo:
+                        arquivo.writelines(linhas)
+
+                    print(get_mensagem_navegacao(idioma_atual, 'cadastro_atualizado'))
+                    time.sleep(2)
+
+        if not cliente_encontrado:
+            print(get_mensagem_navegacao(idioma_atual, 'cliente_nao_encontrado'))
+
+    except FileNotFoundError:
+        print(get_mensagem_navegacao(idioma_atual, 'arquivo_nao_encontrado'))
+
+    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
+
+def excluir_cadastro():
+    pass
+
+
+def valida_senha(senha):
+    if len(senha) < 4:
+        return False
+    if not any(char.isalpha() for char in senha):
+        return False
+    if not any(char.isdigit() for char in senha):
+        return False
+    return True
+
+def grava_cadastro_cliente(cliente):
+    with open("./txt/clientes.txt", "a") as arquivo:
+        arquivo.write(f"{cliente['id']},{cliente['email']},{cliente['senha']},{cliente['nome']},{cliente['telefone']},{cliente['restricao_alimentar']},{cliente['alergia']}\n")
+
 # 4ª Tela - Função para acessar o menu principal
 def escolhe_cardapio():
     global cardapio
@@ -147,78 +391,6 @@ def escolhe_cardapio():
         print(get_mensagem_navegacao(idioma_atual, 'DIGITE_NUMERO_VALIDO'))
         time.sleep(2)
         escolhe_cardapio()
-
-def cadastrar_cliente():
-    mostra_tela_titulo()
-    nome = input(get_mensagem_navegacao(idioma_atual, 'Digite_seu_nome'))
-    while True:
-        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
-        if valida_email(email):
-            break
-        else:
-            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
-    while True:
-        senha = input(idioma_atual, 'informe_senha')
-        confirma_senha = input(idioma_atual, 'informe_senha_novamente')
-        if senha != confirma_senha:
-            print(idioma_atual, 'senhas_nao_conferem')
-            time.sleep(2)
-            mostra_tela_titulo()
-            print("\nCadastro de Cliente")
-            print("\nSeu nome : ", nome)
-            print("Seu email : ", email)
-        elif not valida_senha(senha):
-            print("\nSenha inválida. A senha deve ter pelo menos 4 caracteres, incluindo pelo menos 1 número e 1 letra.")
-            time.sleep(2)
-            mostra_tela_titulo()
-            print("\nCadastro de Cliente")
-            print("\nSeu nome : ", nome)
-            print("Seu email : ", email)
-        else:
-            break
-    telefone = input("Digite seu telefone: ")
-    restricao_alimentar = input("""Se possuir alguma restrição alimentar informe: 
-  1 - Diabetico.
-  2 - Vegetariano.
-  3 - Intolerante a Lactose.
-  4 - Intolerante a Glúten
-  """)
-    alergia = input("Possui alguma alergia? Se sim, informe: ")
-
-    # Gerar um ID único para o cliente, baseado no numero da linha
-    try:
-        with open("clientes.txt", "r") as arquivo:
-            linhas = arquivo.readlines()
-            id_cliente = len(linhas) + 1
-    except FileNotFoundError:
-        id_cliente = 1
-
-    cliente = {
-        "id": id_cliente,
-        "email": email,
-        "senha": senha,
-        "nome": nome,
-        "telefone": telefone,
-        "restricao_alimentar": restricao_alimentar,
-        "alergia": alergia
-    }
-
-    grava_cadastro_cliente(cliente)
-    print("\nCadastro efetuado com sucesso!")
-    time.sleep(3)
-
-def valida_senha(senha):
-    if len(senha) < 4:
-        return False
-    if not any(char.isalpha() for char in senha):
-        return False
-    if not any(char.isdigit() for char in senha):
-        return False
-    return True
-
-def grava_cadastro_cliente(cliente):
-    with open("clientes.txt", "a") as arquivo:
-        arquivo.write(f"{cliente['id']},{cliente['email']},{cliente['senha']},{cliente['nome']},{cliente['telefone']},{cliente['restricao_alimentar']},{cliente['alergia']}\n")
 
 # 5ª Tela - Função para escolher o cardápio
 def lista_pratos_cardapio_escolhido(cardapio):
@@ -409,7 +581,7 @@ def lista_informaçoes_nutricionais():
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'sodio'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'base_dieta'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'atencao_lactose'))
-    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter'))
+    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
 
 def tela_personalizar_prato():
     mostra_tela_titulo()
