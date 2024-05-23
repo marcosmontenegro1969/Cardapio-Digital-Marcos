@@ -1,6 +1,1 @@
-1,marcos@cesar.school,m1m1,Marcos,91987099968,1,
-2,ze@ig.com.br,z1z1,zezinho,81987099965,5,xixi
-3,1djkd@gamai.com,a1a1,alex,81987987987,4,coco
-4,çlkj@jdj.com,x1x1,paulo,8198745685,2,
-5,roberto@ig.com.br,g1g1,roberto,8187878787,5,yoda
-6,mane@ig.com.br,m1m1,mane,81123456789,3,xixi
+1,maml@cesar.school,m1m1,Marcos,81987099968,4,

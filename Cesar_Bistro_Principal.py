@@ -274,6 +274,13 @@ def alterar_cadastro_cliente():
         else:
             print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
 
+    while True:
+        senha_procurada = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
+        if senha_procurada:
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'senha_invalida'))
+
     restricoes_alimentares = {
         "1": get_mensagem_navegacao(idioma_atual, 'diabetico'),
         "2": get_mensagem_navegacao(idioma_atual, 'vegetariano'),
@@ -289,7 +296,7 @@ def alterar_cadastro_cliente():
         cliente_encontrado = False
         for i, linha in enumerate(linhas):
             id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
-            if email.lower() == email_procurado.lower():
+            if email.lower() == email_procurado.lower() and senha == senha_procurada:
                 cliente_encontrado = True
                 while True:
                     mostra_tela_titulo()
@@ -346,8 +353,50 @@ def alterar_cadastro_cliente():
     input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
 
 def excluir_cadastro():
-    pass
+    mostra_tela_titulo()
+    print(get_mensagem_navegacao(idioma_atual, 'exclusao_cadastro_cliente'))
 
+    while True:
+        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        if valida_email(email_procurado):
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+
+    while True:
+        senha_procurada = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
+        if senha_procurada:
+            break
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'senha_invalida'))
+
+    try:
+        with open("./txt/clientes.txt", "r") as arquivo:
+            linhas = arquivo.readlines()
+
+        cliente_encontrado = False
+        for i, linha in enumerate(linhas):
+            id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
+            if email.lower() == email_procurado.lower() and senha == senha_procurada:
+                cliente_encontrado = True
+                print(f"{get_mensagem_navegacao(idioma_atual, 'cliente_encontrado')} {nome}")
+                confirmacao = input(get_mensagem_navegacao(idioma_atual, 'confirmacao_exclusao'))
+                if confirmacao.lower() in ["s", "sim", "yes", "y"]:
+                    linhas.pop(i)
+                    with open("./txt/clientes.txt", "w") as arquivo:
+                        arquivo.writelines(linhas)
+                    print(get_mensagem_navegacao(idioma_atual, 'cliente_excluido'))
+                else:
+                    print(get_mensagem_navegacao(idioma_atual, 'exclusao_cliente_cancelada'))
+                break
+
+        if not cliente_encontrado:
+            print(get_mensagem_navegacao(idioma_atual, 'cliente_nao_encontrado'))
+
+    except FileNotFoundError:
+        print(get_mensagem_navegacao(idioma_atual, 'arquivo_nao_encontrado'))
+
+    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
 
 def valida_senha(senha):
     if len(senha) < 4:

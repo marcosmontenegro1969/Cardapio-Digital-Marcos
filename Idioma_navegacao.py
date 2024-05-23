@@ -42,11 +42,21 @@ mensagens = {
   4 - Intolerante a Glúten
   5 - Nenhuma
   ''',
+        'diabetico': 'Diabetico',
+        'vegetariano': 'Vegetariano',
+        'intolerante_lactose': 'Intolerante a Lactose',
+        'intolerante_gluten': 'Intolerante a Glúten',
+        'nenhuma': 'Nenhuma',
         'nova_alergia': 'Nova alergia (pressione Enter para manter a atual): ',
         'cadastro_atualizado': 'Cadastro atualizado com sucesso!',
         'escolha_alteracao': 'Qual informação deseja alterar (pressione Enter para voltar): ',
         'login_sucesso': "\nLogin efetuado com sucesso, você será direcionado ao cardápio principal.",
         'login_falhou': "\nLogin invalido, tente novamente.",
+        'exclusao_cadastro_cliente': "\nExclusão de cadastro de Cliente\n",
+        'cliente_encontrado': "Cliente Encontrado:",
+        'confirmacao_exclusao': "\nDeseja realmente excluir este cadastro (S/N)? ",
+        'cliente_excluido': "Cadastro excluído com sucesso!",
+        'exclusao_cliente_cancelada': "Erro ao excluir cadastro",
         'CARDAPIO_GERAL': "\nCARDAPIO GERAL\n",
         'CARDAPIO_DIABETICO': "\nCARDAPIO DIABETICO\n",
         'CARDAPIO_VEGETARIANO': "\nCARDAPIO VEGETARIANO\n",
@@ -143,6 +153,8 @@ mensagens = {
         'invalido': "Invalid option, please try again.",
         'rotina_desenvolvimento': 'Routine under development...',
         'aguarde': "Please wait..."
+    },
+    'es': {
     }
 }
 def get_mensagem_navegacao(idioma, chave):
