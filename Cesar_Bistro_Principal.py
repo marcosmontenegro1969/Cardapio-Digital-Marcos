@@ -47,15 +47,15 @@ def escolher_idioma():
 def bemvindo():
     global logado
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, 'bemvindo'))
-    print(get_mensagem_navegacao(idioma_atual, 'mensagem_boas_vindas'))
-    print(get_mensagem_navegacao(idioma_atual, "pergunta_fazer_login"))
-    print(get_mensagem_navegacao(idioma_atual, "login"))
-    print(get_mensagem_navegacao(idioma_atual, "ir_cardapio"))
-    print(get_mensagem_navegacao(idioma_atual, "cadastro_de_cliente"))
-    print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'bemvindo')}")
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'mensagem_boas_vindas')}")
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'pergunta_fazer_login')}")
+    print(f"\n1 - {get_mensagem_navegacao(idioma_atual, "login")}")
+    print(f"2 - {get_mensagem_navegacao(idioma_atual, "ir_cardapio")}")
+    print(f"3 - {get_mensagem_navegacao(idioma_atual, "cadastro_de_cliente")}")
+    print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
 
-    choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+    choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
     if choice == '1':
         efetua_login()
     elif choice == '2':
@@ -72,29 +72,47 @@ def bemvindo():
 
 # 3ª Tela - Função opcional de efetuar login
 def efetua_login():
+    def busca_senha_por_email(email):
+        caminho_arquivo = "../CARDAPIO.MARCOS/txt/clientes.txt"
+        with open(caminho_arquivo, mode='r', encoding='utf-8') as file:
+            for line in file:
+                dados = line.strip().split(',')
+                if dados[1] == email:  # Email está na segunda posição
+                    return dados[2]  # Senha está na terceira posição
+        return None
+
     mostra_tela_titulo()
     print()
+
     while True:
-        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
-        # Exemplo de uso:
+        email = input(get_mensagem_navegacao(idioma_atual, 'informe_seu_email'))
+        
+        if email == "":
+            bemvindo()
+            return
+        
         if valida_email(email):
             break
         else:
             print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
 
-    if email:
+    senha_armazenada = busca_senha_por_email(email)
+    if senha_armazenada:
         senha = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
-        if senha:
-            if senha == 'admin':
-                print(get_mensagem_navegacao(idioma_atual, 'login_sucesso'))
-                global logado
-                logado = True
-                time.sleep(2)
-                escolhe_cardapio()
-            else:
-                print(get_mensagem_navegacao(idioma_atual, 'login_falhou'))
-                time.sleep(2)
-                efetua_login()
+        if senha == senha_armazenada:
+            print(get_mensagem_navegacao(idioma_atual, 'login_sucesso'))
+            global logado
+            logado = True
+            time.sleep(2)
+            escolhe_cardapio()
+        else:
+            print(get_mensagem_navegacao(idioma_atual, 'login_falhou'))
+            time.sleep(2)
+            efetua_login()
+    else:
+        print(get_mensagem_navegacao(idioma_atual, 'email_nao_encontrado'))
+        time.sleep(2)
+        efetua_login()
 
 def valida_email(email):
     # Verifica se há um "@" no email
@@ -120,14 +138,14 @@ def valida_email(email):
 
 def cadastro_cliente():
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, 'manutencao_cadastro_cliente'))
-    print(get_mensagem_navegacao(idioma_atual, 'fazer_cadastro_cliente'))
-    print(get_mensagem_navegacao(idioma_atual, 'consultar_cadastro_cliente'))
-    print(get_mensagem_navegacao(idioma_atual, 'alterar_cadastro_cliente'))
-    print(get_mensagem_navegacao(idioma_atual, 'excluir_cadastro_cliente'))
-    print(get_mensagem_navegacao(idioma_atual, '5 - voltar'))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'manutencao_cadastro_cliente')}")
+    print(f"\n1 - {get_mensagem_navegacao(idioma_atual, 'fazer_cadastro_cliente')}")
+    print(f"2 - {get_mensagem_navegacao(idioma_atual, 'consultar_cadastro_cliente')}")
+    print(f"3 - {get_mensagem_navegacao(idioma_atual, 'alterar_cadastro_cliente')}")
+    print(f"4 - {get_mensagem_navegacao(idioma_atual, 'excluir_cadastro_cliente')}")
+    print(f"5 - {get_mensagem_navegacao(idioma_atual, 'voltar')}")
 
-    escolha = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+    escolha = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
     if escolha == '1':
         fazer_cadastro_cliente()
     elif escolha == '2':
@@ -147,11 +165,11 @@ def cadastro_cliente():
 
 def fazer_cadastro_cliente():
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, 'inclusão_cadastro_cliente'))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'inclusão_cadastro_cliente')}")
 
-    nome = input(get_mensagem_navegacao(idioma_atual, 'Digite_seu_nome'))
+    nome = input(f"\n{get_mensagem_navegacao(idioma_atual, 'Digite_seu_nome')}")
     while True:
-        email = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        email = input(get_mensagem_navegacao(idioma_atual, 'informe_seu_email'))
         if valida_email(email):
             break
         else:
@@ -218,14 +236,14 @@ def fazer_cadastro_cliente():
 
 def consultar_cadastro_cliente():
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, 'consulta_cadastro_cliente'))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'consulta_cadastro_cliente')}")
 
     while True:
-        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        email_procurado = input(f"\n{get_mensagem_navegacao(idioma_atual, 'informe_seu_email')}")
         if valida_email(email_procurado):
             break
         else:
-            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+            print(f"\n{get_mensagem_navegacao(idioma_atual, 'email_invalido')}")
 
     restricoes_alimentares = {
         "1": "Diabético",
@@ -236,15 +254,15 @@ def consultar_cadastro_cliente():
     }
     
     try:
-        with open("./txt/clientes.txt", "r") as arquivo:
+        with open("../CARDAPIO.MARCOS/txt/clientes.txt", "r") as arquivo:
             linhas = arquivo.readlines()
             cliente_encontrado = False
             for linha in linhas:
                 id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
                 if email.lower() == email_procurado.lower():
                     restricao_alimentar_desc = restricoes_alimentares.get(restricao_alimentar, "Nenhuma")
-                    print(f"{get_mensagem_navegacao(idioma_atual, 'id_cliente')}{id_cliente}")
-                    print(f"{get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
+                    alergia = alergia if alergia else "Nenhuma"
+                    print(f"\n{get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
                     print(f"{get_mensagem_navegacao(idioma_atual, 'email_cliente')}{email}")
                     print(f"{get_mensagem_navegacao(idioma_atual, 'telefone_cliente')}{telefone}")
                     print(f"{get_mensagem_navegacao(idioma_atual, 'restricao_alimentar_cliente')}{restricao_alimentar_desc}")
@@ -256,23 +274,19 @@ def consultar_cadastro_cliente():
                 print(get_mensagem_navegacao(idioma_atual, 'cliente_nao_encontrado'))
                 
     except FileNotFoundError:
-        print(get_mensagem_navegacao(idioma_atual, 'arquivo_nao_encontrado'))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, 'arquivo_nao_encontrado')}")
 
-    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
-
-import time
+    input(f"\n{get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar')}")
 
 def alterar_cadastro_cliente():
     mostra_tela_titulo()
-    print()
-    print(get_mensagem_navegacao(idioma_atual, 'alteracao_cadastro_cliente'))
-    print()
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'alteracao_cadastro_cliente')}")
     while True:
-        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        email_procurado = input(f"\n{get_mensagem_navegacao(idioma_atual, 'informe_seu_email')}")
         if valida_email(email_procurado):
             break
         else:
-            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+            print(f"\n{get_mensagem_navegacao(idioma_atual, 'email_invalido')}")
 
     while True:
         senha_procurada = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
@@ -286,7 +300,6 @@ def alterar_cadastro_cliente():
         "2": get_mensagem_navegacao(idioma_atual, 'vegetariano'),
         "3": get_mensagem_navegacao(idioma_atual, 'intolerante_lactose'),
         "4": get_mensagem_navegacao(idioma_atual, 'intolerante_gluten'),
-        "5": get_mensagem_navegacao(idioma_atual, 'nenhuma')
     }
 
     try:
@@ -300,14 +313,12 @@ def alterar_cadastro_cliente():
                 cliente_encontrado = True
                 while True:
                     mostra_tela_titulo()
-                    print(f"{get_mensagem_navegacao(idioma_atual, 'id_cliente')}{id_cliente}")
-                    print(f"1. {get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
+                    print(f"\n1. {get_mensagem_navegacao(idioma_atual, 'nome_cliente')}{nome}")
                     print(f"2. {get_mensagem_navegacao(idioma_atual, 'email_cliente')}{email}")
                     print(f"3. {get_mensagem_navegacao(idioma_atual, 'telefone_cliente')}{telefone}")
                     print(f"4. {get_mensagem_navegacao(idioma_atual, 'restricao_alimentar_cliente')}{restricoes_alimentares.get(restricao_alimentar, get_mensagem_navegacao(idioma_atual, 'nenhuma'))}")
-                    print(f"5. {get_mensagem_navegacao(idioma_atual, 'alergia_cliente')}{alergia}")
-                    print()
-                    escolha = input(get_mensagem_navegacao(idioma_atual, 'escolha_alteracao'))
+                    print(f"5. {get_mensagem_navegacao(idioma_atual, 'alergia_cliente')}{alergia if alergia else 'Nenhuma'}")
+                    escolha = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_alteracao')}")
 
                     if escolha == '':
                         return
@@ -341,7 +352,7 @@ def alterar_cadastro_cliente():
                     with open("./txt/clientes.txt", "w") as arquivo:
                         arquivo.writelines(linhas)
 
-                    print(get_mensagem_navegacao(idioma_atual, 'cadastro_atualizado'))
+                    print(f"\n{get_mensagem_navegacao(idioma_atual, 'cadastro_atualizado')}")
                     time.sleep(2)
 
         if not cliente_encontrado:
@@ -354,21 +365,21 @@ def alterar_cadastro_cliente():
 
 def excluir_cadastro():
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, 'exclusao_cadastro_cliente'))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'exclusao_cadastro_cliente')}")
 
     while True:
-        email_procurado = input(get_mensagem_navegacao(idioma_atual, 'informe_email'))
+        email_procurado = input(f"\n{get_mensagem_navegacao(idioma_atual, 'informe_seu_email')}")
         if valida_email(email_procurado):
             break
         else:
-            print(get_mensagem_navegacao(idioma_atual, 'email_invalido'))
+            print(f"\n{get_mensagem_navegacao(idioma_atual, 'email_invalido')}")
 
     while True:
         senha_procurada = input(get_mensagem_navegacao(idioma_atual, 'informe_senha'))
         if senha_procurada:
             break
         else:
-            print(get_mensagem_navegacao(idioma_atual, 'senha_invalida'))
+            print(f"\n{get_mensagem_navegacao(idioma_atual, 'senha_invalida')}")
 
     try:
         with open("./txt/clientes.txt", "r") as arquivo:
@@ -379,8 +390,8 @@ def excluir_cadastro():
             id_cliente, email, senha, nome, telefone, restricao_alimentar, alergia = linha.strip().split(",")
             if email.lower() == email_procurado.lower() and senha == senha_procurada:
                 cliente_encontrado = True
-                print(f"{get_mensagem_navegacao(idioma_atual, 'cliente_encontrado')} {nome}")
-                confirmacao = input(get_mensagem_navegacao(idioma_atual, 'confirmacao_exclusao'))
+                print(f"\n{get_mensagem_navegacao(idioma_atual, 'cliente_encontrado')} {nome}")
+                confirmacao = input(f"\n{get_mensagem_navegacao(idioma_atual, 'confirmacao_exclusao')}")
                 if confirmacao.lower() in ["s", "sim", "yes", "y"]:
                     linhas.pop(i)
                     with open("./txt/clientes.txt", "w") as arquivo:
@@ -415,22 +426,21 @@ def grava_cadastro_cliente(cliente):
 def escolhe_cardapio():
     global cardapio
     mostra_tela_titulo()
-    print(get_mensagem_navegacao(idioma_atual, "escolhe_cardapio"))
-    print(get_mensagem_navegacao(idioma_atual, "1 - Geral"))
-    print(get_mensagem_navegacao(idioma_atual, "2 - Diabetico"))
-    print(get_mensagem_navegacao(idioma_atual, "3 - Vegetariano"))
-    print(get_mensagem_navegacao(idioma_atual, "4 - Sem Lactose"))
-    print(get_mensagem_navegacao(idioma_atual, "5 - Sem Gluten"))
-    print(get_mensagem_navegacao(idioma_atual, "6 - Sazonal"))
+    print(f"\n{get_mensagem_navegacao(idioma_atual, 'escolhe_cardapio')}")
+    print(f"\n1 - {get_mensagem_navegacao(idioma_atual, 'geral')}")
+    print(f"2 - {get_mensagem_navegacao(idioma_atual, 'diabetico')}")
+    print(f"3 - {get_mensagem_navegacao(idioma_atual, 'vegetariano')}")
+    print(f"4 - {get_mensagem_navegacao(idioma_atual, 'sem_Lactose')}")
+    print(f"5 - {get_mensagem_navegacao(idioma_atual, 'sem_Gluten')}")
+    print(f"6 - {get_mensagem_navegacao(idioma_atual, 'sazonal')}")
     if logado:
-        print(get_mensagem_navegacao(idioma_atual, "7 - Favoritos"))
-        print(get_mensagem_navegacao(idioma_atual, "8 - voltar"))
+        print(f"7 - {get_mensagem_navegacao(idioma_atual, 'favoritos')}")
+        print(f"8 - {get_mensagem_navegacao(idioma_atual, 'voltar')}")
     else:
-        print(get_mensagem_navegacao(idioma_atual, "7 - voltar"))
-
+        print(f"7 - {get_mensagem_navegacao(idioma_atual, 'voltar')}")
     try:
-        cardapio = int(input(get_mensagem_navegacao(idioma_atual, 'escolha')))
-        if (logado == True and cardapio == 8) or (logado == False and cardapio == 7):
+        cardapio = int(input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}"))
+        if (logado and cardapio == 8) or (not logado and cardapio == 7):
             mostra_tela_titulo()
             bemvindo()
         else:
@@ -447,10 +457,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
     global codigo_prato
 
     if cardapio == 1:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_GERAL"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_GERAL")}")
         ler_arquivo_pratos('./Cardapios/geral.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '001'
             apresenta_prato_escolhido(codigo_prato)        
@@ -464,10 +474,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
             escolhe_cardapio()
 
     elif cardapio == 2:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_DIABETICO"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_DIABETICO")}")
         ler_arquivo_pratos('./Cardapios/diabetico.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '004'
             apresenta_prato_escolhido(codigo_prato)        
@@ -481,10 +491,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
             escolhe_cardapio()          
      
     elif cardapio == 3:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_VEGETARIANO"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_VEGETARIANO")}")
         ler_arquivo_pratos('./Cardapios/vegetariano.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '007'
             apresenta_prato_escolhido(codigo_prato)        
@@ -498,10 +508,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
             escolhe_cardapio()
 
     elif cardapio == 4:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_LACTOSE"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_LACTOSE")}")
         ler_arquivo_pratos('./Cardapios/sem_lactose.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '007'
             apresenta_prato_escolhido(codigo_prato)        
@@ -515,10 +525,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
             escolhe_cardapio() 
 
     elif cardapio == 5:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_GLUTEN"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_SEM_GLUTEN")}")
         ler_arquivo_pratos('./Cardapios/sem_gluten.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '010'
             apresenta_prato_escolhido(codigo_prato)        
@@ -532,10 +542,10 @@ def lista_pratos_cardapio_escolhido(cardapio):
             escolhe_cardapio() 
 
     elif cardapio == 6:
-        print(get_mensagem_navegacao(idioma_atual, "CARDAPIO_SAZONAL"))
+        print(f"\n{get_mensagem_navegacao(idioma_atual, "CARDAPIO_SAZONAL")}")
         ler_arquivo_pratos('./Cardapios/sazonal.txt')
-        print(get_mensagem_navegacao(idioma_atual, "4 - voltar"))
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        print(f"4 - {get_mensagem_navegacao(idioma_atual, "voltar")}")
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             codigo_prato = '013'
             apresenta_prato_escolhido(codigo_prato)        
@@ -564,29 +574,37 @@ def lista_pratos_cardapio_escolhido(cardapio):
 def ler_arquivo_pratos(menu_escolhido):
     with open(menu_escolhido, 'r') as arquivo:
         dados = arquivo.readlines()
+        print()
         for dado in dados:
             print(dado.strip())
 
 # 6ª tela - Lista as opções do menu principal usando dicionario de idiomas
-def apresenta_prato_escolhido(codigo_prato):    
-    mostra_tela_titulo()
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'prato') + ": " + get_informacoes_prato(codigo_prato, idioma_atual, 'descricao'))
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'lista_ingredientes'))
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'preco_tempo'))
+def apresenta_prato_escolhido(codigo_prato):   
 
-    print(get_mensagem_navegacao(idioma_atual, 'pedir_este_prato'))
-    print(get_mensagem_navegacao(idioma_atual, 'nutricional'))
-    print(get_mensagem_navegacao(idioma_atual, 'personalize'))
-    print(get_mensagem_navegacao(idioma_atual, 'video'))
-    print(get_mensagem_navegacao(idioma_atual, '5 - voltar'))
-    print(get_mensagem_navegacao(idioma_atual, 'finalizar_pedido'))
+    def finalizar_pedido():
+        print(get_mensagem_navegacao(idioma_atual, 'pedido_finalizado'))
+        os.system("cls" if os.name == 'nt' else "clear")  # Limpa a tela, compatível com Windows e Unix
+        print("Enviando pedido para a cozinha...\n", flush=True)
+        time.sleep(2)
+
+    mostra_tela_titulo()
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'prato') + ": " + get_informacoes_prato(codigo_prato, idioma_atual, 'descricao')}")
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'lista_ingredientes')}")
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'preco_tempo')}")
+
+    print(f"\n1 - {get_mensagem_navegacao(idioma_atual, 'pedir_este_prato')}")
+    print(f"2 - {get_mensagem_navegacao(idioma_atual, 'nutricional')}")
+    print(f"3 - {get_mensagem_navegacao(idioma_atual, 'personalize')}")
+    print(f"4 - {get_mensagem_navegacao(idioma_atual, 'video')}")
+    print(f"5 - {get_mensagem_navegacao(idioma_atual, 'voltar')}")
+    print(f"6 - {get_mensagem_navegacao(idioma_atual, 'finalizar_pedido')}\n")
 
     if ingredientes_retirados:
         print(get_mensagem_navegacao(idioma_atual, 'lista_ingredientes_retirados'), ingredientes_retirados)
     if ingredientes_adicionados:
         print(get_mensagem_navegacao(idioma_atual, 'lista_ingredientes_adicionados'), ingredientes_adicionados)
     while True:
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         # Escolheu Pedir este Prato
         if choice == '1':
             rotina_em_desenvolvimento()
@@ -598,7 +616,7 @@ def apresenta_prato_escolhido(codigo_prato):
             apresenta_prato_escolhido(codigo_prato)
         # Escolheu opção 3 (Personalize seu prato)
         elif choice == '3':
-            # mostra_tela_titulo()
+            mostra_tela_titulo()
             personalizar_prato()
                 
         # Escolheu opção 4 (Vídeo de apresentação do prato)
@@ -612,15 +630,15 @@ def apresenta_prato_escolhido(codigo_prato):
             mostra_tela_titulo()
             lista_pratos_cardapio_escolhido(cardapio)
         elif choice == '6':
-            finalizar_app()
-            break
+            finalizar_pedido()
+            bemvindo()
         else:
             pass
 
 # 7ª tela - Mostra as informações nutricionais do prato
 def lista_informaçoes_nutricionais():
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'info_nutricional'))
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'calorias'))
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'info_nutricional')}")
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'calorias')}")
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'carboidratos'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'proteinas'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'gorduras'))
@@ -628,17 +646,16 @@ def lista_informaçoes_nutricionais():
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'trans'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'fibra'))
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'sodio'))
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'base_dieta'))
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'base_dieta')}")
     print(get_informacoes_prato(codigo_prato, idioma_atual, 'atencao_lactose'))
-    input(get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar'))
+    input(f"\n{get_mensagem_navegacao(idioma_atual, 'aperte_enter_voltar')}")
 
 def tela_personalizar_prato():
-    mostra_tela_titulo()
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'prato'))
-    print(get_informacoes_prato(codigo_prato, idioma_atual, 'lista_ingredientes'))
-    print(get_mensagem_navegacao(idioma_atual, 'retirar_ingrediente'))
-    print(get_mensagem_navegacao(idioma_atual, 'adicionar_ingrediente'))
-    print(get_mensagem_navegacao(idioma_atual, '3 - voltar'))
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'prato')}")
+    print(f"\n{get_informacoes_prato(codigo_prato, idioma_atual, 'lista_ingredientes')}")
+    print(f"\n1 - {get_mensagem_navegacao(idioma_atual, 'retirar_ingrediente')}")
+    print(f"2 - {get_mensagem_navegacao(idioma_atual, 'adicionar_ingrediente')}")
+    print(f"3 - {get_mensagem_navegacao(idioma_atual, 'voltar')}")
 
 def personalizar_prato():
     choice = '0'
@@ -653,7 +670,7 @@ def personalizar_prato():
         print(get_mensagem_navegacao(idioma_atual, 'lista_ingredientes_adicionados'), ingredientes_adicionados)
 
     while choice.isdigit and choice != '3':
-        choice = input(get_mensagem_navegacao(idioma_atual, 'escolha'))
+        choice = input(f"\n{get_mensagem_navegacao(idioma_atual, 'escolha_uma_opcao')}")
         if choice == '1':
             if ingredientes_retirados:
                 print(get_mensagem_navegacao(idioma_atual, 'aviso_substituir_ingredientes'))
@@ -684,7 +701,8 @@ def reproduz_video_prato():
     # Caminho base onde os vídeos estão armazenados
     base_path = r"C:\Cesar_School\PROJETO\CARDAPIO.MARCOS\Videos"
     # Constrói o caminho completo do arquivo de vídeo
-    video_filename = f"{codigo_prato}.mp4"  # Adiciona o código do prato e a extensão .mp4
+    # video_filename = f"{codigo_prato}.mp4"  # Adiciona o código do prato e a extensão .mp4
+    video_filename = "007.mp4"
     path_video = os.path.join(base_path, video_filename)  # Usa os.path.join para construir o caminho completo
 
     # Verifica se o arquivo de vídeo existe
@@ -696,8 +714,8 @@ def reproduz_video_prato():
 
 def finalizar_app():
     os.system("cls" if os.name == 'nt' else "clear")  # Limpa a tela, compatível com Windows e Unix
-    print("Encerrando o programa...\n", flush=True)
-    time.sleep(1)
+    print("Encerrando aplicação...\n", flush=True)
+    time.sleep(2)
 
 def rotina_em_desenvolvimento():
     for _ in range(3):  # Faz a frase piscar 2 vezes
@@ -706,12 +724,6 @@ def rotina_em_desenvolvimento():
         time.sleep(0.5)  # Tempo com a frase visível
         os.system("cls" if os.name == 'nt' else "clear")  # Limpa a tela
         time.sleep(0.5)  # Tempo com a tela limpa
-
-
-
-
-    
-
 
 # Função principal
 def main():
